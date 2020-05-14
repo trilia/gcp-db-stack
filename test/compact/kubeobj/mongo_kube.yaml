@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  labels:
+    name: mongodb
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: mongod
+  labels:
+    app: mongod-ss
+    role: mongo
+    environment: test
+spec:
+  serviceName: mongodb-service
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mongod
+      role: mongo
+      environment: test
+  template:
+    metadata:
+      labels:
+        app: mongod
+        role: mongo
+        environment: test
+    spec:
+      terminationGracePeriodSeconds: 15
+      affinity:
+        #nodeAffinity:
+        #  requiredDuringSchedulingIgnoredDuringExecution:
+        #    nodeSelectorTerms:
+        #    - matchExpressions:
+        #      - key: failure-domain.beta.kubernetes.io/zone
+        #        operator: In
+        #        values:
+        #        - ap-southeast1-a
+        #        - ap-southeast1-b
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - mongod
+              - key: role
+                operator: In
+                values:
+                - mongo
+              - key: environment
+                operator: In
+                values:
+                - test
+            topologyKey: failure-domain.beta.kubernetes.io/zone
+      containers:
+        - name: mongod-container
+          image: rajeshghosh/mongo:1.0
+          #imagePullPolicy: Always
+          args: ["--bind_ip", "0.0.0.0", "--replSet", "test_rs0", "--auth", "--cluterAuthMode", "keyFile", "--keyFile", "/etc/secret-vol/auth-key"]
+          env:
+          - name: HOST_USER_ID
+            value: "1000"
+          - name: HOST_USER_NAME
+            value: "ubuntu"
+          - name: HOST_GROUP_ID
+            value: "1000"
+          - name: HOST_GROUP_NAME
+            value: "ubuntu"
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-vol
+              mountPath: /trilia/mongo/data
+              subPath: data
+            - name: mongo-vol
+              mountPath: /trilia/mongo/log
+              subPath: log
+            - name: creds
+              mountPath: "/etc/secret-vol"
+              readOnly: true
+          terminationMessagePath: "/tmp/my-log"
+
+      volumes:
+         - name: creds
+           secret:
+             secretName: db-cluster-auth-key
+
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-vol
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: pd-multi-az
+      resources:
+        requests:
+          storage: 6Gi
+

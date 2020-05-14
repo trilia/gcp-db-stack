@@ -1,0 +1,46 @@
+apiVersion: "v1"
+kind: "PersistentVolume"
+metadata:
+  name: db-volume-0
+spec:
+  capacity:
+    storage: 8Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: pd-multi-az
+  gcePersistentDisk:
+    pdName: trl-mongo-a
+    fsType: ext4
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: failure-domain.beta.kubernetes.io/zone
+          operator: In
+          values:
+          - asia-southeast1-a
+---
+apiVersion: "v1"
+kind: "PersistentVolume"
+metadata:
+  name: db-volume-1
+spec:
+  capacity:
+    storage: 8Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: pd-multi-az
+  gcePersistentDisk:
+    pdName: trl-mongo-b
+    fsType: ext4
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: failure-domain.beta.kubernetes.io/zone
+          operator: In
+          values:
+          - asia-southeast1-b
+
