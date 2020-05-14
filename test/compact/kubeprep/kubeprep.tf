@@ -168,11 +168,9 @@ resource "null_resource" "checkout_tf" {
 
                 inline = [
                     "cd /trilia_ci",
-                        "sudo -u ubuntu git clone https://github.com/trilia/gcp-stack.git",
-                        "cd gcp-stack/prod/compact/kubeprep",
-                        "sudo -u ubuntu terraform init -input=false",
-                        //"cd aws_stack/prod/compact/kubelaunch",
-                        //"terraform init -input=false"
+                        "sudo -u ubuntu git clone https://github.com/trilia/gcp-db-stack.git",
+                        "cd gcp-db-stack/prod/compact/kubeprep",
+                        "sudo -u ubuntu terraform init -input=false"
                 ]
 
                 connection {
