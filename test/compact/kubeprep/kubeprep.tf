@@ -169,7 +169,7 @@ resource "null_resource" "checkout_tf" {
                   type        = "ssh"
                   user        = "ghosh_rajesh_gmail_com"
                   private_key = "${file(var.ssh_key_private)}"
-                  host            = "${google_compute_instance.kubelauncher_instance.network_interface.0.network_ip}"                                                                                                                                                                                                                           host            = "${google_compute_instance.kubelauncher_instance.network_interface.0.network_ip}"
+                  host            = "${google_compute_instance.kubelauncher_instance.network_interface.0.network_ip}" 
                 }
 
         }
