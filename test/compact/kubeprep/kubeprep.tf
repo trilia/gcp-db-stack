@@ -118,14 +118,6 @@ resource "google_compute_attached_disk" "kubelauncher-disk-attach" {
   instance = google_compute_instance.kubelauncher_instance.self_link
 }
 
-resource "google_compute_attached_disk" "kubelauncher-disk-attach" {
-
-  depends_on = [google_compute_disk.kubelauncher-disk , google_compute_instance.kubelauncher_instance]
-
-  disk     = google_compute_disk.kubelauncher-disk.self_link
-  instance = google_compute_instance.kubelauncher_instance.self_link
-}
-
 resource "null_resource" "mount_ebs_volume" {
 
         depends_on = [google_compute_attached_disk.kubelauncher-disk-attach]
