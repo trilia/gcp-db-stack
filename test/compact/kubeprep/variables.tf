@@ -4,11 +4,15 @@ variable "var_project" {
 }
 
 variable "region" {
-  default = "asia-south1"
+  default = "asia-southeast1"
 }
 
 variable "public_key_file" {
-  default = "trl-trial-1.pub"
+  default = "/trilia_ci/trl-trial-1.pub"
+}
+
+variable "gcp_cred_file" {
+  default = "/trilia_ci/trl-trial-101-a36657d98b71.json"
 }
 
 variable "ssh_key_private" {
@@ -49,7 +53,6 @@ variable "svc_subnet_netid_bits" {
         default = "26"
 }
 
-
 // Service sub-net related :
 
 variable "db_cluster_name" {
@@ -67,4 +70,3 @@ variable "db_vpc_netid_bits" {
 variable "db_subnet_netid_bits" {
         default = "26"
 }
-
