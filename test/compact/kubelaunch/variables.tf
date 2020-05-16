@@ -3,7 +3,11 @@ variable "region" {
 }
 
 variable "var_project" {
-        default = "trl-trial-101"
+	default = "trl-trial-101"
+}
+
+variable "gcp_cred_file" {
+  default = "/trilia_ci/trl-trial-101-a36657d98b71.json"
 }
 
 variable "gke_master_loc" {
@@ -17,11 +21,9 @@ variable "gke_cluster_zones" {
 
 
 variable "db_vpc_name" {
-        default = "trl-compact-prod-db-cluster-vpc-db"
+	default = "trl-compact-prod-db-cluster-vpc-db"
 }
 
 variable "db_subnet_0" {
   default = "trl-db-subnet-0"
 }
-
-
